@@ -2,8 +2,14 @@
 A hackathon project
 
 
-## Our task
-n/a
+## This branch (Python + Flask + WebSocket + Redis)
+
+This branch is an experimental branch for a potential cloud 
+solution. It runs on Heroku with Python + Flask, and will 
+serve the Jinja2 template content.
+
+It will also try to serve some real-time graphs based on the 
+data, which we will receive from our backend cloud webservice.
 
 
 ## Technology stack
