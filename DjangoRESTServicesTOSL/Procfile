@@ -1,1 +1,1 @@
-web: gunicorn DjangoRESTServicesTOSL.wsgi --log-file -
+web: gunicorn manage:__name__ --log-file -
