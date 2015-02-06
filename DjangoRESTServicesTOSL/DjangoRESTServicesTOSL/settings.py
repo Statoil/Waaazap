@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'DjangoREST',
+    'webfront',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,9 +60,18 @@ WSGI_APPLICATION = 'DjangoRESTServicesTOSL.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': os.getenv('CUBE2_DB_ENGINE', 'tenant_schemas.postgresql_backend'),
+        'ENGINE': os.getenv('CUBE2_DB_ENGINE', 'django.db.backends.postgresql_psycopg2'),
+        'NAME': os.getenv('CUBE2_DB_NAME', 'hackathon'),
+        'USER': os.getenv('CUBE2_DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('CUBE2_DB_PASSWORD', 'test'),
+        'HOST': os.getenv('CUBE2_DB_HOST', 'localhost'),
+        'PORT': os.getenv('CUBE2_DB_PORT', '5432'),
     }
+}
+
+SOUTH_DATABASE_ADAPTERS = {
+    'default': 'south.db.postgresql_psycopg2',
 }
 
 # Internationalization
