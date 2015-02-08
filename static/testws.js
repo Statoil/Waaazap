@@ -1,6 +1,8 @@
 var socket;
 $(document).ready(function(){
-    socket = io.connect(document.location.protocol'://' + document.location.hostname + ':' + document.location.port + '/' + document.location.pathname);
+    socket = io.connect(document.location.protocol + 
+        '://' + document.location.hostname + 
+        ':' + document.location.port + '/' + document.location.pathname);
     socket.on('my response', function(msg) {
         $('#log').append('<p>Received: ' + msg.data + '</p>');
     });
