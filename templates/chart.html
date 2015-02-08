@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+
+{% block title_content %}
+    Chartss!
+{% endblock %}
+{% block inner_content %}
+    {% if chart %}
+        {{ chart | safe }}
+    {% endif %}
+{% endblock %}

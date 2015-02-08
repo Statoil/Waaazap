@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title_content %}
+    Testing websocket
+{% endblock %}
+
+{% block inner_content %}
+<form class="form form-horizontal" method="post" role="form">
+  {{ form.hidden_tag() }}
+  {# {{ wtf.form_errors(form, hiddens="only") }} #}
+
+  {{ wtf.form_field(form.emit_name) }}
+  {{ wtf.form_field(form.emit_broadcast) }}
+  <input type="submit" value="Go">
+</form>
+{% endblock %}
+
+{% block inner_content_below %}
+<p>Received:</p>
+<div id="log">
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('.static', filename='testws.js')}}"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+{% endblock %}
