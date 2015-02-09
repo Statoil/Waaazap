@@ -5,7 +5,7 @@ $(document).ready(function() {
         '://' + document.location.hostname + 
         (document.location.port? ':' + document.location.port : '') + '/test';
 
-    url = 'wss://waaazap.herokuapp.com/test';
+    url = '/test';
     console.log("url: ", url);
     socket = io.connect(url);
     socket.on('my response', function(msg) {
