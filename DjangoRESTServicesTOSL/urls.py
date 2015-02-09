@@ -36,4 +36,6 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^happyness_reg/$', views.happyness_reg_list),
     url(r'^happyness_reg/(?P<pk>[0-9]+)/$', views.happyness_reg_detail),
+    url(r'^happyness_status/$', views.happyness_status),
+
 )

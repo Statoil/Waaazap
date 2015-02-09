@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from models import HappynessRegistration
-from serializers import HappynessRegistrationSerializer
+from models import HappynessRegistration, HappynessStatus
+from serializers import HappynessRegistrationSerializer, HappynessStatusSerializer
 import logging
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -26,6 +26,18 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
+
+@csrf_exempt
+def happyness_status(request):
+    if request.method == 'GET':
+        #TODO: Get the real numbers from db/model
+        sad_number = HappynessRegistration.objects.filter(happyness_signal='sad').count()
+        flat_number = HappynessRegistration.objects.filter(happyness_signal='flat').count()
+        good_number = HappynessRegistration.objects.filter(happyness_signal='good').count()
+        happy_number = HappynessRegistration.objects.filter(happyness_signal='happy').count()
+        happyness_status = HappynessStatus(1,sad_number,flat_number,good_number,happy_number)
+        serializer = HappynessStatusSerializer(happyness_status)
+        return JSONResponse(serializer.data)
 
 @csrf_exempt
 def happyness_reg_list(request):

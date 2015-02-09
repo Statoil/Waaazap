@@ -5,3 +5,8 @@ class HappynessRegistration(models.Model):
     timestamp = models.DateTimeField(blank=True)
     happyness_signal = models.CharField(max_length=20)
 
+class HappynessStatus(models.Model):
+    sad_number = models.IntegerField()
+    flat_number = models.IntegerField()
+    good_number = models.IntegerField()
+    happy_number = models.IntegerField()
