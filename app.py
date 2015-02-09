@@ -82,21 +82,23 @@ class HappyMeter(Resource):
 
         device_data = redis.get(device_id)
         # device = devices.get(device_id)
+        print("First Redis get: device_data -> {}".format(device_data))
 
         if not device_data:
+            print("Could not find device_data, constructing the basics")
             device_data = {
                 "happy": 0,
                 "good": 0,
                 "flat": 0,
                 "sad": 0
             }
-            #redis.set(device_id, device_body)
+            # redis.set(device_id, device_body)
             # return {'status': 'error', 'msg': 'No device found'}, 400
 
         # Update the data
         print("device_data: {}".format(device_data))
         device_data[data.get('signal')] += 1
-        redis.set(device_id, device_data)
+        redis.set(device_id, {device_id: device_data})
         redis.publish(REDIS_CHAN, {device_id: device_data})
 
         return {
