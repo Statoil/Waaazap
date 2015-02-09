@@ -1,10 +1,11 @@
-var socket;
+var socket,
+    url;
 $(document).ready(function() {
-    var url = 'wss' + 
+    url = 'wss' + 
         '://' + document.location.hostname + 
         (document.location.port? ':' + document.location.port : '') + '/test';
 
-    url = 'ws://waaazap.herokuapp.com/test';
+    url = 'wss://waaazap.herokuapp.com/test';
     console.log("url: ", url);
     socket = io.connect(url);
     socket.on('my response', function(msg) {
