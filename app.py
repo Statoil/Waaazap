@@ -30,6 +30,11 @@ POST: /happymeter/test1
 
 
 class HappyMeter(Resource):
+    def get(self):
+        return {
+            'devices': devices.keys()
+        }
+
     def get(self, device_id):
         print("Getting data for device id: {}".format(device_id))
         if not devices.has_key(device_id):
