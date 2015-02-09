@@ -20,6 +20,10 @@ class HappyBackend(object):
         """Register a WebSocket connection for Redis updates."""
         self.clients.append(client)
 
+    def unregister(self, client):
+        """Unregister a WebSocket connection for Redis updates."""
+        self.clients.remove(client)
+
     def send(self, client, data):
         """Send given data to the registered client.
         Automatically discards invalid connections."""

@@ -5,8 +5,9 @@ from flask.ext.socketio import SocketIO, emit
 import pygal
 from flask_wtf import Form
 from wtforms import StringField
+import os
 import random
-import json
+import logging
 from flask.ext.restful import Resource, Api
 from sets import Set
 import redis
@@ -48,6 +49,8 @@ POST: /happymeter/test1
 }
 """
 
+happies = HappyBackend()
+happies.start()
 
 class HappyMeter(Resource):
     def get(self):
@@ -91,7 +94,6 @@ class HappyMeter(Resource):
         }
 
 
-
 class MyForm(Form):
     emit_name = StringField('emit_name')
     emit_broadcast = StringField('emit_broadcast')
@@ -131,11 +133,14 @@ def gen_random_nr():
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
+    print("Client connected: {}".format(request.namespace))
+    happies.register(request.namespace)
     emit('connected')
 
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
+    happies.unregister(request.namespace)
     print("Client disconnected")
 
 
