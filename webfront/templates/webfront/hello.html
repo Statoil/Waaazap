@@ -22,7 +22,7 @@ Full Name: {{firstName + " " + lastName}}
 <ul>
   <li ng-repeat="x in names">
        {% verbatim %}
-    {{ x.device_id + ', ' + x.timestamp }}
+    {{ x.device_id + ', ' + x.timestamp + ', ' + x.happyness_signal}}
      {% endverbatim %}
   </li>
 </ul>
