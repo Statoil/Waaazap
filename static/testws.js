@@ -1,8 +1,10 @@
 var socket;
-$(document).ready(function(){
-    socket = io.connect(document.location.protocol + 
+$(document).ready(function() {
+    var url = 'ws' + 
         '://' + document.location.hostname + 
-        ':' + document.location.port + '/' + document.location.pathname);
+        (document.location.port? ':' + document.location.port : '') + '/test';
+    console.log("url: ", url);
+    socket = io.connect(url);
     socket.on('my response', function(msg) {
         $('#log').append('<p>Received: ' + msg.data + '</p>');
     });
