@@ -97,6 +97,7 @@ class HappyMeter(Resource):
 
         # Update the data
         print("device_data: {}".format(device_data))
+        print("data signal: {}".format(data))
         device_data[data.get('signal')] += 1
         redis.set(device_id, {device_id: device_data})
         redis.publish(REDIS_CHAN, {device_id: device_data})
