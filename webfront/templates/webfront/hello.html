@@ -32,7 +32,7 @@ Full Name: {{firstName + " " + lastName}}
 
 <script>
 function customersController($scope,$http) {
-    $http.get("http://127.0.0.1:8000/happyness_registrations/?format=json")
+    $http.get("/happyness_registrations/?format=json")
     .success(
             function(response) {
                 $scope.names = response;});
