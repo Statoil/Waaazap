@@ -94,6 +94,7 @@ class HappyMeter(Resource):
             # return {'status': 'error', 'msg': 'No device found'}, 400
 
         # Update the data
+        print("device_data: {}".format(device_data))
         device_data[data.get('signal')] += 1
         redis.set(device_id, device_data)
         redis.publish(REDIS_CHAN, {device_id: device_data})
