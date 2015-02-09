@@ -13,7 +13,6 @@ from sets import Set
 import redis
 from backend import HappyBackend
 
-
 approved_statuses = Set(["happy", "good", "flat", "sad"])
 devices = {
     "test1": {
@@ -49,7 +48,7 @@ POST: /happymeter/test1
 }
 """
 
-happies = HappyBackend()
+happies = HappyBackend(redis, REDIS_CHAN)
 happies.start()
 
 class HappyMeter(Resource):

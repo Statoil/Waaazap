@@ -4,16 +4,16 @@ import gevent
 class HappyBackend(object):
     """Interface for registering and updating WebSocket clients."""
 
-    def __init__(self):
+    def __init__(self, redis_obj, channel):
         self.clients = list()
-        self.pubsub = redis.pubsub()
-        self.pubsub.subscribe(REDIS_CHAN)
+        self.pubsub = redis_obj.pubsub()
+        self.pubsub.subscribe(channel)
 
     def __iter_data(self):
         for message in self.pubsub.listen():
             data = message.get('data')
             if message['type'] == 'message':
-                app.logger.info(u'Sending message: {}'.format(data))
+                #app.logger.info(u'Sending message: {}'.format(data))
                 yield data
 
     def register(self, client):
