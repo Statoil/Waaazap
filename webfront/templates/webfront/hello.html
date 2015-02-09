@@ -1,10 +1,52 @@
+
+
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 </head>
+
 <body>
-Hello world
-</body>
+
+<div ng-app="" ng-controller="personController">
+
+First Name: <input type="text" ng-model="firstName"><br>
+Last Name: <input type="text" ng-model="lastName"><br>
+<br>
+    {% verbatim %}
+Full Name: {{firstName + " " + lastName}}
+    {% endverbatim %}
+
+<div ng-controller="customersController">
+
+<ul>
+  <li ng-repeat="x in names">
+       {% verbatim %}
+    {{ x.device_id + ', ' + x.timestamp }}
+     {% endverbatim %}
+  </li>
+</ul>
+
+</div>
+    </div>
+
+<script>
+function customersController($scope,$http) {
+    $http.get("http://127.0.0.1:8000/happyness_registrations/?format=json")
+    .success(
+            function(response) {
+                $scope.names = response;});
+}
+</script>
+
+
+
+
+<script>
+function personController($scope) {
+    $scope.firstName = "John";
+    $scope.lastName = "Doe";
+}
+</script>
+
 </html>
