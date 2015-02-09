@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 import gevent
 from flask.ext.socketio import SocketIO, emit
@@ -6,6 +6,64 @@ import pygal
 from flask_wtf import Form
 from wtforms import StringField
 import random
+import json
+from flask.ext.restful import Resource, Api
+from sets import Set
+
+
+approved_statuses = Set(["happy", "good", "flat", "sad"])
+devices = {
+    "test1": {
+        "happy": 0,
+        "good": 0,
+        "flat": 0,
+        "sad": 0
+    }
+}
+
+"""
+POST: /happymeter/test1
+{'signal': 'sad',
+'timestamp': '<timestamp>'
+}
+"""
+
+
+class HappyMeter(Resource):
+    def get(self, device_id):
+        print("Getting data for device id: {}".format(device_id))
+        if not devices.has_key(device_id):
+            return {
+                'status': 'error',
+                'msg': "No device with id: {}".format(device_id)
+            }
+        return devices.get(device_id)
+
+    def post(self, device_id):
+        print("Posting new data for device id: {}".format(device_id))
+        json_data = request.get_json()
+        print("debug: {}".format(json_data))
+        data = json_data.get("data")
+        if not data:
+            return {'status': 'error', 'msg': 'Badly shaped body'}, 400
+
+        if not data.get('signal'):
+            return {'status': 'error', 'msg': 'Bad input signal'}, 400
+        elif not data.get('timestamp'):
+            return {'status': 'error', 'msg': 'Bad input timestamp'}, 400
+
+        device = devices.get(device_id)
+        if not device:
+            return {'status': 'error', 'msg': 'No device found'}, 400
+
+        device[data.get('signal')] += 1
+
+        return {
+            'status': 'ok',
+            'msg': 'Updated signal',
+            'signal': data.get('signal'),
+            'value': device.get(data.get('signal'))
+        }
 
 
 def create_app():
@@ -15,12 +73,15 @@ def create_app():
 
 app = create_app()
 app.config['SECRET_KEY'] = 'secret123'
-#app.debug = True
+api = Api(app)
 socketio = SocketIO(app)
+
 
 class MyForm(Form):
     emit_name = StringField('emit_name')
     emit_broadcast = StringField('emit_broadcast')
+
+api.add_resource(HappyMeter, '/happymeter/<string:device_id>')
 
 
 @app.route('/')
