@@ -1,6 +1,6 @@
 var socket;
 $(document).ready(function() {
-    var url = 'ws' + 
+    var url = 'wss' + 
         '://' + document.location.hostname + 
         (document.location.port? ':' + document.location.port : '') + '/test';
 
