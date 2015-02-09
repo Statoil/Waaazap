@@ -9,6 +9,8 @@ import random
 import json
 from flask.ext.restful import Resource, Api
 from sets import Set
+import redis
+from backend import HappyBackend
 
 
 approved_statuses = Set(["happy", "good", "flat", "sad"])
@@ -20,6 +22,24 @@ devices = {
         "sad": 0
     }
 }
+
+
+def create_app():
+    app = Flask(__name__)
+    Bootstrap(app)
+    return app
+
+app = create_app()
+app.config['SECRET_KEY'] = 'secret123'
+app.debug = 'DEBUG' in os.environ
+
+api = Api(app)
+socketio = SocketIO(app)
+
+REDIS_URL = os.environ['REDISCLOUD_URL']
+REDIS_CHAN = 'happymeter'
+
+redis = redis.from_url(REDIS_URL)
 
 """
 POST: /happymeter/test1
@@ -70,16 +90,6 @@ class HappyMeter(Resource):
             'value': device.get(data.get('signal'))
         }
 
-
-def create_app():
-    app = Flask(__name__)
-    Bootstrap(app)
-    return app
-
-app = create_app()
-app.config['SECRET_KEY'] = 'secret123'
-api = Api(app)
-socketio = SocketIO(app)
 
 
 class MyForm(Form):
