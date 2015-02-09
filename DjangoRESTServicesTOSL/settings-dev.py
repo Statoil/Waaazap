@@ -36,10 +36,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'DjangoREST',
     'webfront',
-    'rest_framework',
-    'djangular',
+    'DjangoRESTServicesTOSL',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -64,10 +64,10 @@ DATABASES = {
     'default': {
         #'ENGINE': os.getenv('CUBE2_DB_ENGINE', 'tenant_schemas.postgresql_backend'),
         'ENGINE': os.getenv('CUBE2_DB_ENGINE', 'django.db.backends.postgresql_psycopg2'),
-        'NAME': os.getenv('CUBE2_DB_NAME', 'hackathon'),
-        'USER': os.getenv('CUBE2_DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('CUBE2_DB_PASSWORD', 'test'),
-        'HOST': os.getenv('CUBE2_DB_HOST', 'localhost'),
+        'NAME': os.getenv('CUBE2_DB_NAME', 'd8o8dpuvt4l8st'),
+        'USER': os.getenv('CUBE2_DB_USER', 'egfsboncifltiu'),
+        'PASSWORD': os.getenv('CUBE2_DB_PASSWORD', 'h3dC8k-F6Kn8udkbUIrrm2IP0o'),
+        'HOST': os.getenv('CUBE2_DB_HOST', 'ec2-79-125-110-242.eu-west-1.compute.amazonaws.com'),
         'PORT': os.getenv('CUBE2_DB_PORT', '5432'),
     }
 }
@@ -93,9 +93,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_ROOT = "c:\temp\static"
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

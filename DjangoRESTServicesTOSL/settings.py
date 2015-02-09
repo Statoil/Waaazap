@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'DjangoREST',
     'webfront',
+    'DjangoRESTServicesTOSL',
 )
 
 MIDDLEWARE_CLASSES = (
