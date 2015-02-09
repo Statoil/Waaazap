@@ -15,7 +15,7 @@ def create_app():
 
 app = create_app()
 app.config['SECRET_KEY'] = 'secret123'
-app.debug = True
+#app.debug = True
 socketio = SocketIO(app)
 
 class MyForm(Form):
