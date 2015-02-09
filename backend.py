@@ -1,4 +1,3 @@
-import redis
 import gevent
 
 class HappyBackend(object):
@@ -8,9 +7,11 @@ class HappyBackend(object):
         self.clients = list()
         self.pubsub = redis_obj.pubsub()
         self.pubsub.subscribe(channel)
+        print("Starting HappyBackend")
 
     def __iter_data(self):
         for message in self.pubsub.listen():
+            print("message: {}".format(message))
             data = message.get('data')
             if message['type'] == 'message':
                 #app.logger.info(u'Sending message: {}'.format(data))

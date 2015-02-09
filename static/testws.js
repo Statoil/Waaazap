@@ -9,15 +9,15 @@ $(document).ready(function() {
     console.log("url: ", url);
     socket = io.connect(url);
     socket.on('my response', function(msg) {
-        $('#log').append('<p>Received: ' + msg.data + '</p>');
+        $('#log').prepend('<p>Received: ' + msg.data + '</p>');
     });
 
     socket.on('crap_data', function(msg) {
-        $('#log').append("<p>Data: " + msg.data + "</p>");
+        $('#log').prepend("<p>Data: " + msg.data + "</p>");
     });
 
     socket.on('connected', function() {
-        socket.emit('random_nr');
+        //socket.emit('random_nr');
     });
 
     $('form#emit').submit(function(event) {

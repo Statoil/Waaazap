@@ -32,6 +32,7 @@ def create_app():
 app = create_app()
 app.config['SECRET_KEY'] = 'secret123'
 app.debug = 'DEBUG' in os.environ
+app.debug = True
 
 api = Api(app)
 socketio = SocketIO(app)
@@ -79,17 +80,29 @@ class HappyMeter(Resource):
         elif not data.get('timestamp'):
             return {'status': 'error', 'msg': 'Bad input timestamp'}, 400
 
-        device = devices.get(device_id)
-        if not device:
-            return {'status': 'error', 'msg': 'No device found'}, 400
+        device_data = redis.get(device_id)
+        # device = devices.get(device_id)
 
-        device[data.get('signal')] += 1
+        if not device_data:
+            device_data = {
+                "happy": 0,
+                "good": 0,
+                "flat": 0,
+                "sad": 0
+            }
+            #redis.set(device_id, device_body)
+            # return {'status': 'error', 'msg': 'No device found'}, 400
+
+        # Update the data
+        device_data[data.get('signal')] += 1
+        redis.set(device_id, device_data)
+        redis.publish(REDIS_CHAN, {device_id: device_data})
 
         return {
             'status': 'ok',
             'msg': 'Updated signal',
             'signal': data.get('signal'),
-            'value': device.get(data.get('signal'))
+            'value': device_data.get(data.get('signal'))
         }
 
 
@@ -120,12 +133,19 @@ def test_message(message):
     emit('my response', {'data': message['data']}, broadcast=True)
 
 
+@socketio.on('happymeter', namespace='/test')
+def ws_happymeter():
+    emit('happymeter', {'data': message})
+
+
 @socketio.on('random_nr', namespace='/test')
 def gen_random_nr():
+    print("Generating an infinite random int loop")
     while True:
+        rand_int = random.randint(0, 1000000)
         emit(
             'crap_data',
-            {'data': random.randint(0, 1000000)},
+            {'data': rand_int},
             namespace='/test')
         gevent.sleep(1)
 
@@ -164,4 +184,4 @@ def line_chart():
 
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, debug=True)
