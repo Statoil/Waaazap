@@ -1,4 +1,5 @@
 Django==1.7.1
+Markdown==2.5.2
 MySQL-Connector-Python==1.2.2
 MySQL-python==1.2.3
 PyYAML==3.11
@@ -13,6 +14,7 @@ django-behave==0.1.2
 django-bootstrap3-datetimepicker==2.2.3
 django-crispy-forms==1.4.0
 django-db-multitenant==0.1.2
+django-filter==0.9.2
 django-grappelli==2.5.2
 django-import-export==0.2.4
 django-mailbox==4.0.1
@@ -24,6 +26,8 @@ django-secure==1.0.1
 django-suit==0.2.11
 django-tenancy==0.1.2
 django-tenant-schemas==1.4.7
+django-toolbelt==0.0.1
+djangorestframework==3.0.4
 enum34==1.0
 freshen==0.2
 gunicorn==18.0
