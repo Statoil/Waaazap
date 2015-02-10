@@ -38,23 +38,15 @@ var colors = ["#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
 var color = d3.scale.ordinal()
   .domain(["happy", "good", "flat", "sad"])
   .range(["#7b6888", "#6b486b", "#a05d56", "#d0743c"]);
-/*var color = d3.scale.ordinal()
-.domain([])
-.range([]);*/
+
 function updateGraph() {
   $.getJSON("/happymeter/test1")
     .done(function(json) {
         console.log("json: ", json);
-        obj = json;
-
-        /*var keys = Object.keys(json.test1);
-        console.log("color: ", color.range());*/
 
         function getData() {
           var labels = color.domain();
           return labels.map(function(label){
-              console.log("label -> " + label);
-              console.log("value -> " + json.test1[label]);
               return {
                   label: label, 
                   value: json.test1[label]
@@ -105,7 +97,7 @@ function changeGraph(data) {
     .append("text")
     .attr("dy", ".35em")
     .text(function(d) {
-      return d.data.label;
+      return d.data.label + "(" + d.data.value + ")";
     });
   
   function midAngle(d){

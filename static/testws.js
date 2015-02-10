@@ -32,7 +32,6 @@ $(document).ready(function() {
             console.log("Got an OK signal");
             $('#log').prepend("<p>Button pushed: " + msg.signal + " (#" + msg.value +")</p>");
             updateGraph();
-
         } else {
             console.log("Bad signal.. ", msg);
         }
