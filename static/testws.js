@@ -17,7 +17,18 @@ $(document).ready(function() {
     });
 
     socket.on('connected', function() {
-        //socket.emit('random_nr');
+        $('#log').append('<p>Connected!</p>');
+        $.getJSON("/happymeter/test1")
+            .done(function(json) {
+                console.log("json: ", json);
+            })
+            .fail(function(json) {
+                console.log("get data failed!");
+            });
+    });
+
+    socket.on('happymeter', function(msg) {
+        console.log("Got happy signal: ", msg);
     });
 
     $('form#emit').submit(function(event) {
