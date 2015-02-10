@@ -42,7 +42,7 @@
 {% block content %}
 <div class="container">
 <div class="jumbotron">
-    <h1>{% block title_content %}n/a{% endblock %}</h1>
+    {% block title_content %}<h1></h1>{% endblock %}
 
     {% block inner_content %}<i>content</i>{% endblock %}
 </div>

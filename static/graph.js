@@ -71,7 +71,6 @@ function updateGraph() {
 updateGraph();
 
 function changeGraph(data) {
-  console.log("changeGraph data: ", data);
 
   /* ------- PIE SLICES -------*/
   var slice = svg.select(".slices").selectAll("path.slice")
