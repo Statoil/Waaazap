@@ -69,11 +69,11 @@ class HappyMeter(Resource):
         print("Posting new data for device id: {}".format(device_id))
         json_data = request.get_json()
         print("debug: {}".format(json_data))
-        data = json_data.get("data")
+        data = json_data
         if not data:
             return {'status': 'error', 'msg': 'Badly shaped body'}, 400
 
-        if not data.get('signal'):
+        if not data.get('mood'):
             return {'status': 'error', 'msg': 'Bad input signal'}, 400
         elif not data.get('timestamp'):
             return {'status': 'error', 'msg': 'Bad input timestamp'}, 400
@@ -99,7 +99,7 @@ class HappyMeter(Resource):
         print("device_data: {}".format(device_data))
         print("data signal: {}".format(data))
         print("device id: {}".format(device_id))
-        happy_signal = data.get('signal')
+        happy_signal = data.get('mood')
         print("happy signal: {}".format(happy_signal))
 
         device_data[device_id][happy_signal] += 1
@@ -110,8 +110,8 @@ class HappyMeter(Resource):
         retval = {
             'status': 'ok',
             'msg': 'Updated signal',
-            'signal': data.get('signal'),
-            'value': device_data[device_id][data.get('signal')]
+            'signal': data.get('mood'),
+            'value': device_data[device_id][data.get('mood')]
         }
         redis.publish(REDIS_CHAN, json.dumps(retval))
         return retval
