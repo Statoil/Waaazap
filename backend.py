@@ -43,7 +43,6 @@ class HappyBackend(object):
     def run(self):
         """Listens for new messages in Redis, and sends them to clients."""
         for data in self.__iter_data():
-            #gevent.spawn(self.send, None, data)
             for client in self.clients:
                 print("Client: {}".format(client))
                 gevent.spawn(self.send, client, data)
