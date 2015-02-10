@@ -17,7 +17,7 @@ var width = 960,
 var pie = d3.layout.pie()
   .sort(null)
   .value(function(d) {
-    console.log("d: ", d);
+    //console.log("d: ", d);
     return d.value;
   });
 
@@ -53,8 +53,16 @@ function updateGraph() {
               }
           });
         }
+        var myData = [];
+        for(var o in json.test1) {
+          myData.push({
+             label: o, 
+             value: json.test1[o]
+          })
+        }
 
-        changeGraph(getData());
+
+        changeGraph(myData);
     })
     .fail(function(json) {
         console.log("get data failed!");
