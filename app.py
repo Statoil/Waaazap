@@ -2,12 +2,12 @@ from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 import gevent
 from flask.ext.socketio import SocketIO, emit
+from forms import MyForm
 import pygal
-from flask_wtf import Form
-from wtforms import StringField
 import os
 import random
 import logging
+import json
 from flask.ext.restful import Resource, Api
 from sets import Set
 import redis
@@ -49,7 +49,7 @@ POST: /happymeter/test1
 }
 """
 
-happies = HappyBackend(redis, REDIS_CHAN)
+happies = HappyBackend(redis, REDIS_CHAN, socketio)
 happies.start()
 
 class HappyMeter(Resource):
@@ -60,12 +60,14 @@ class HappyMeter(Resource):
 
     def get(self, device_id):
         print("Getting data for device id: {}".format(device_id))
-        if not devices.has_key(device_id):
+        device_data = redis.get(device_id)
+        if not device_data:
             return {
                 'status': 'error',
                 'msg': "No device with id: {}".format(device_id)
             }
-        return devices.get(device_id)
+        device_data = json.loads(device_data)
+        return device_data
 
     def post(self, device_id):
         print("Posting new data for device id: {}".format(device_id))
@@ -86,12 +88,13 @@ class HappyMeter(Resource):
 
         if not device_data:
             print("Could not find device_data, constructing the basics")
-            device_data = {
-                u"happy": 0,
-                u"good": 0,
-                u"flat": 0,
-                u"sad": 0
-            }
+            device_data = {u"test1": {
+                    u"happy": 0,
+                    u"good": 0,
+                    u"flat": 0,
+                    u"sad": 0
+                    }
+                }
             # redis.set(device_id, device_body)
             # return {'status': 'error', 'msg': 'No device found'}, 400
         else:
@@ -100,9 +103,15 @@ class HappyMeter(Resource):
         # Update the data
         print("device_data: {}".format(device_data))
         print("data signal: {}".format(data))
-        device_data[data.get('signal')] += 1
-        redis.set(device_id, json.dumps({device_id: device_data}))
-        redis.publish(REDIS_CHAN, json.dumps({device_id: device_data}))
+        print("device id: {}".format(device_id))
+        happy_signal = data.get('signal')
+        print("happy signal: {}".format(happy_signal))
+
+        device_data[device_id][happy_signal] += 1
+
+        data_to_store = json.dumps(device_data)
+        redis.set(device_id, data_to_store)
+        redis.publish(REDIS_CHAN, data_to_store)
 
         return {
             'status': 'ok',
@@ -110,11 +119,6 @@ class HappyMeter(Resource):
             'signal': data.get('signal'),
             'value': device_data.get(data.get('signal'))
         }
-
-
-class MyForm(Form):
-    emit_name = StringField('emit_name')
-    emit_broadcast = StringField('emit_broadcast')
 
 api.add_resource(HappyMeter, '/happymeter/<string:device_id>')
 
@@ -137,12 +141,6 @@ def test_message(message):
 @socketio.on('my broadcast event', namespace='/test')
 def test_message(message):
     emit('my response', {'data': message['data']}, broadcast=True)
-
-
-@socketio.on('happymeter', namespace='/test')
-def ws_happymeter():
-    emit('happymeter', {'data': message})
-
 
 @socketio.on('random_nr', namespace='/test')
 def gen_random_nr():
