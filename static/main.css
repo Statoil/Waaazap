@@ -2,3 +2,16 @@ body {
   min-height: 2000px;
   padding-top: 70px;
 }
+
+.jumbotron {
+    padding: 0.5em 0.6em;
+    h1 {
+        font-size: 2em;
+    }
+    p {
+        font-size: 1.2em;
+        .btn {
+            padding: 0.5em;
+        }
+    }
+}
