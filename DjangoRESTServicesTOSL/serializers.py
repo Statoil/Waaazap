@@ -6,7 +6,7 @@ from rest_framework import serializers
 class HappynessRegistrationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = HappynessRegistration
-        fields = ('device_id', 'timestamp', 'happyness_signal')
+        fields = ('device_id', 'timestamp', 'mood')
 
 
 

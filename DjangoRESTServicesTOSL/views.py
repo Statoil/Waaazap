@@ -31,10 +31,10 @@ class JSONResponse(HttpResponse):
 def happyness_status(request):
     if request.method == 'GET':
         #TODO: Get the real numbers from db/model
-        sad_number = HappynessRegistration.objects.filter(happyness_signal='sad').count()
-        flat_number = HappynessRegistration.objects.filter(happyness_signal='flat').count()
-        good_number = HappynessRegistration.objects.filter(happyness_signal='good').count()
-        happy_number = HappynessRegistration.objects.filter(happyness_signal='happy').count()
+        sad_number = HappynessRegistration.objects.filter(mood='sad').count()
+        flat_number = HappynessRegistration.objects.filter(mood='flat').count()
+        good_number = HappynessRegistration.objects.filter(mood='good').count()
+        happy_number = HappynessRegistration.objects.filter(mood='happy').count()
         happyness_status = HappynessStatus(1,sad_number,flat_number,good_number,happy_number)
         serializer = HappynessStatusSerializer(happyness_status)
         return JSONResponse(serializer.data)

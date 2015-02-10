@@ -10,7 +10,7 @@ data = {
     'device_id': 'mats sin pc',
     'timestamp': stempel_formatert,
     #'timestamp': '2015-02-09T13:55:00Z',
-    'happyness_signal': 'happy'
+    'mood': 'good'
 }
 
 req = urllib2.Request('http://127.0.0.1:8000/happyness_reg/')
