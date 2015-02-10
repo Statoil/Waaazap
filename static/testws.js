@@ -1,6 +1,9 @@
 var socket,
     obj,
     url;
+
+var colors = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+
 $(document).ready(function() {
     url = 'wss' + 
         '://' + document.location.hostname + 
@@ -22,6 +25,22 @@ $(document).ready(function() {
         $.getJSON("/happymeter/test1")
             .done(function(json) {
                 console.log("json: ", json);
+                obj = json;
+                var keys = Object.keys(json.test1);
+                var color = d3.scale.ordinal()
+                    .domain(keys)
+                    .range(colors.slice(0,keys.length));
+                var labels = color.domain();
+                labels.map(function(label){
+                    console.log("label -> " + label);
+                    console.log("value -> " + json.test1[label]);
+                    return {
+                        label: label, 
+                        value: json.test1[label]
+                    }
+                });
+
+                changeGraph(labels);
             })
             .fail(function(json) {
                 console.log("get data failed!");
@@ -31,10 +50,10 @@ $(document).ready(function() {
     socket.on('happymeter', function(msg) {
         console.log("Got happy signal: ", msg);
         msg = JSON.parse(msg);
-        obj = msg;
         if (msg.status == "ok") {
             console.log("Got an OK signal");
             $('#log').prepend("<p>Button pushed: " + msg.signal + " (#" + msg.value +")</p>");
+
         } else {
             console.log("Bad signal.. ", msg);
         }

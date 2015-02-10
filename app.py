@@ -88,7 +88,7 @@ class HappyMeter(Resource):
                     u"good": 0,
                     u"flat": 0,
                     u"sad": 0
-                    }
+                    }, "timestamp": data.get('timestamp')
                 }
             # redis.set(device_id, device_body)
             # return {'status': 'error', 'msg': 'No device found'}, 400
