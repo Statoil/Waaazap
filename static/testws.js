@@ -1,4 +1,5 @@
 var socket,
+    obj,
     url;
 $(document).ready(function() {
     url = 'wss' + 
@@ -29,6 +30,14 @@ $(document).ready(function() {
 
     socket.on('happymeter', function(msg) {
         console.log("Got happy signal: ", msg);
+        msg = JSON.parse(msg);
+        obj = msg;
+        if (msg.status == "ok") {
+            console.log("Got an OK signal");
+            $('#log').prepend("<p>Button pushed: " + msg.signal + " (#" + msg.value +")</p>");
+        } else {
+            console.log("Bad signal.. ", msg);
+        }
     });
 
     $('form#emit').submit(function(event) {
