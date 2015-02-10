@@ -52,12 +52,8 @@ POST: /happymeter/test1
 happies = HappyBackend(redis, REDIS_CHAN, socketio)
 happies.start()
 
-class HappyMeter(Resource):
-    def get(self):
-        return {
-            'devices': devices.keys()
-        }
 
+class HappyMeter(Resource):
     def get(self, device_id):
         print("Getting data for device id: {}".format(device_id))
         device_data = redis.get(device_id)
@@ -83,7 +79,6 @@ class HappyMeter(Resource):
             return {'status': 'error', 'msg': 'Bad input timestamp'}, 400
 
         device_data = redis.get(device_id)
-        # device = devices.get(device_id)
         print("First Redis get: device_data -> {}".format(device_data))
 
         if not device_data:
@@ -111,16 +106,27 @@ class HappyMeter(Resource):
 
         data_to_store = json.dumps(device_data)
         redis.set(device_id, data_to_store)
-        redis.publish(REDIS_CHAN, data_to_store)
 
-        return {
+        retval = {
             'status': 'ok',
             'msg': 'Updated signal',
             'signal': data.get('signal'),
-            'value': device_data.get(data.get('signal'))
+            'value': device_data[device_id][data.get('signal')]
+        }
+        redis.publish(REDIS_CHAN, json.dumps(retval))
+        return retval
+
+
+class ListDevices(Resource):
+    def get(self):
+        devices = redis.keys()
+        print("devices: {}".format(devices))
+        return {
+            'devices': devices
         }
 
 api.add_resource(HappyMeter, '/happymeter/<string:device_id>')
+api.add_resource(ListDevices, '/happymeter')
 
 
 @app.route('/')
