@@ -19,6 +19,12 @@ body {
 #visualization {
     width: 800px;
     height: 500px;
+}
+
+#log {
+    overflow-x:hidden;
+    overflow-y:visible;
+    height:150px;
 } 
 
 svg {

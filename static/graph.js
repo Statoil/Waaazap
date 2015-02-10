@@ -17,6 +17,7 @@ var width = 960,
 var pie = d3.layout.pie()
   .sort(null)
   .value(function(d) {
+    console.log("d: ", d);
     return d.value;
   });
 
@@ -30,31 +31,47 @@ var outerArc = d3.svg.arc()
 
 svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-var key = function(d){ return d.data.label; };
+var key = function(d) { return d.data.label; };
 
-/*var color = d3.scale.ordinal()
-  .domain(["Lorem ipsum", "dolor sit", "amet", "consectetur", "adipisicing", "elit", "sed", "do", "eiusmod", "tempor", "incididunt"])
-  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]); */
+var colors = ["#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+
 var color = d3.scale.ordinal()
+  .domain(["happy", "good", "flat", "sad"])
+  .range(["#7b6888", "#6b486b", "#a05d56", "#d0743c"]);
+/*var color = d3.scale.ordinal()
 .domain([])
-.range([]);
+.range([]);*/
+function updateGraph() {
+  $.getJSON("/happymeter/test1")
+    .done(function(json) {
+        console.log("json: ", json);
+        obj = json;
 
-function randomData (){
-  var labels = color.domain();
-  return labels.map(function(label){
-    return { label: label, value: Math.random() }
-  });
+        /*var keys = Object.keys(json.test1);
+        console.log("color: ", color.range());*/
+
+        function getData() {
+          var labels = color.domain();
+          return labels.map(function(label){
+              console.log("label -> " + label);
+              console.log("value -> " + json.test1[label]);
+              return {
+                  label: label, 
+                  value: json.test1[label]
+              }
+          });
+        }
+
+        changeGraph(getData());
+    })
+    .fail(function(json) {
+        console.log("get data failed!");
+    });
 }
-
-//changeGraph(randomData());
-
-/*d3.select(".randomize")
-  .on("click", function(){
-    changeGraph(randomData());
-  });
- */
+updateGraph();
 
 function changeGraph(data) {
+  console.log("changeGraph data: ", data);
 
   /* ------- PIE SLICES -------*/
   var slice = svg.select(".slices").selectAll("path.slice")
