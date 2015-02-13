@@ -18,7 +18,7 @@ We were quiet eager - so every one of us created their own web service in the Cl
 
 ## The architecture
 
-[waaazap architecture](https://github.com/Statoil/Waaazap/raw/master/waaaazap_architecture.png)
+![waaazap architecture](https://github.com/Statoil/Waaazap/raw/master/waaaazap_architecture.png)
 
 
 ## Web projects
