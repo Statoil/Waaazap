@@ -11,9 +11,11 @@ We were quiet eager - so every one of us created their own web service in the Cl
 
 *Device:* A voting device with 4x buttons
 
-*Cloud:* A endpoint which receives input signals from the _device_
+*Cloud:* A endpoint which receives input signals from the _device_, and also exposes
+a RESTful API so that the clients can connect and present the data.
 
-*Client:* The web client (_Angular_) which will present the votes in a neatly manner
+*Client:* A web client (html5, javascript, Angular, bootstrap, i.e.) which presents 
+the results from the voting device ("happymeter"). 
 
 
 ## The architecture
